@@ -19,6 +19,7 @@ spec:
       - name: rmq-consumer
         image: ashbourne1990/rabbitmq-single-queue-example:latest
         command: ["python", "/app/consumer/receive.py"]
+        imagePullPolicy: Always
         env:
         - name: RMQ_USER
           valueFrom:
@@ -31,6 +32,6 @@ spec:
               name: rmq-credentials
               key: password
         - name: RMQ_QUEUE
-          value: 'queue01'
+          value: queue01
         - name: RMQ_HOST
           value: rabbitmq.rabbitmq.svc.cluster.local

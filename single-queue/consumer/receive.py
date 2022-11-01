@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Job which sends messages to RabbitMQ via the default exchange'''
+'''Job which consumes RabbitMQ queue messages'''
 
 import os
 import sys

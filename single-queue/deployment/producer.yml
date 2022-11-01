@@ -10,6 +10,7 @@ spec:
       - name: rmq-producer
         image: ashbourne1990/rabbitmq-single-queue-example:latest
         command: ["python", "/app/producer/send.py", "1000"]
+        imagePullPolicy: Always
         env:
         - name: RMQ_USER
           valueFrom:
@@ -22,7 +23,7 @@ spec:
               name: rmq-credentials
               key: password
         - name: RMQ_QUEUE
-          value: 'queue01'
+          value: queue01
         - name: RMQ_HOST
           value: rabbitmq.rabbitmq.svc.cluster.local
       restartPolicy: Never
