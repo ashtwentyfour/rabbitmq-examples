@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rmq-consumer
+  namespace: application
+  labels:
+    app: rmq-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rmq-consumer
+  template:
+    metadata:
+      labels:
+        app: rmq-consumer
+    spec:
+      containers:
+      - name: rmq-consumer
+        image: ashbourne1990/rabbitmq-single-queue-example:latest
+        command: ["python", "/app/consumer/receive.py"]
+        env:
+        - name: RMQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: username
+        - name: RMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: password
+        - name: RMQ_QUEUE
+          value: 'queue01'
+        - name: RMQ_HOST
+          value: rabbitmq.rabbitmq.svc.cluster.local
