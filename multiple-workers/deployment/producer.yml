@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rmq-producer
+  namespace: application
+spec:
+  template:
+    spec:
+      containers:
+      - name: rmq-producer
+        image: ashbourne1990/rabbitmq-multiple-workers-example:latest
+        command: ["python", "/app/producer/send.py", "1000"]
+        imagePullPolicy: Always
+        env:
+        - name: RMQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: username
+        - name: RMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: password
+        - name: RMQ_QUEUE
+          value: queue01
+        - name: RMQ_HOST
+          value: rabbitmq.rabbitmq.svc.cluster.local
+      restartPolicy: Never
+  backoffLimit: 4
