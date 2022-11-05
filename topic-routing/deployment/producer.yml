@@ -1,0 +1,68 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rmq-producer
+  namespace: application
+spec:
+  template:
+    spec:
+      containers:
+      - name: rmq-producer-01
+        image: ashbourne1990/rabbitmq-topic-routing-example:latest
+        command: ["python", "/app/producer/send.py", "rome.ancient.city", "10"]
+        imagePullPolicy: Always
+        env:
+        - name: RMQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: username
+        - name: RMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: password
+        - name: RMQ_EXCHANGE
+          value: topicex01
+        - name: RMQ_HOST
+          value: rabbitmq.rabbitmq.svc.cluster.local
+      - name: rmq-producer-02
+        image: ashbourne1990/rabbitmq-topic-routing-example:latest
+        command: ["python", "/app/producer/send.py", "ancient.greek.history", "20"]
+        imagePullPolicy: Always
+        env:
+        - name: RMQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: username
+        - name: RMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: password
+        - name: RMQ_EXCHANGE
+          value: topicex01
+        - name: RMQ_HOST
+          value: rabbitmq.rabbitmq.svc.cluster.local
+      - name: rmq-producer-03
+        image: ashbourne1990/rabbitmq-topic-routing-example:latest
+        command: ["python", "/app/producer/send.py", "culture.of.the.aztecs", "5"]
+        imagePullPolicy: Always
+        env:
+        - name: RMQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: username
+        - name: RMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: password
+        - name: RMQ_EXCHANGE
+          value: topicex01
+        - name: RMQ_HOST
+          value: rabbitmq.rabbitmq.svc.cluster.local  
+      restartPolicy: Never
+  backoffLimit: 4
