@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rpc-server
+  namespace: application
+  labels:
+    app: rpc-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rpc-server
+  template:
+    metadata:
+      labels:
+        app: rpc-server
+    spec:
+      containers:
+      - name: rpc-server
+        image: ashbourne1990/rabbitmq-rpc-example:latest
+        command: ["python", "/app/consumer/server.py"]
+        imagePullPolicy: Always
+        env:
+        - name: RMQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: username
+        - name: RMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: password
+        - name: RMQ_HOST
+          value: rabbitmq.rabbitmq.svc.cluster.local

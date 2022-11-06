@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rpc-client
+  namespace: application
+spec:
+  template:
+    spec:
+      containers:
+      - name: rmq-client
+        image: ashbourne1990/rabbitmq-rpc-example:latest
+        command: ["python", "/app/producer/client.py", "90"]
+        imagePullPolicy: Always
+        env:
+        - name: RMQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: username
+        - name: RMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rmq-credentials
+              key: password
+        - name: RMQ_HOST
+          value: rabbitmq.rabbitmq.svc.cluster.local
+      restartPolicy: Never
+  backoffLimit: 4
