@@ -12,3 +12,17 @@ Build the container image for any one of the examples using the provided Dockerf
 ```
 docker build -f Dockerfile --platform=linux/amd64 -t ashbourne1990/rabbitmq-rpc-example:latest remote-procedure-call
 ```
+
+Deploy the RabbitMQ server locally by running:
+
+```
+docker run -d --hostname rabbitmq-local --name rabbitmq -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+```
+
+Deploy RabbitMQ on Kubernetes by running:
+
+```
+kubectl apply -f rabbitmq-server/deployment/rabbitmq-server.yml
+```
+
+The YML manifests for each messaging scenario (Direct Exchange, Fanout Exchange, etc.) are available under the ```producer``` and ```consumer``` folders
