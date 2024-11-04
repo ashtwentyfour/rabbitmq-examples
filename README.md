@@ -26,3 +26,9 @@ kubectl apply -f rabbitmq-server/deployment/rabbitmq-server.yml
 ```
 
 The YML manifests for each messaging scenario (Direct Exchange, Fanout Exchange, etc.) are available under the ```producer``` and ```consumer``` folders
+
+Create a Kubernetes Secret with default (or custom) RabbitMQ credentials (within every Namespace with workloads connecting to the cluster):
+
+```
+kubectl create secret generic -n application rmq-credentials --from-literal=username=guest --from-literal=password=guest
+```
